@@ -1,7 +1,7 @@
 "use client";
 import * as z from "zod"
 import axios from "axios"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { amountOptions, formSchema, resolutionOptions } from "./constants";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -18,69 +18,117 @@ import { Card, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 import { useProModal } from "@/hook/use-pro-modal";
 import { toast } from "react-hot-toast";
+import { useConversationContext } from "@/components/context";
+import { EmptyImage } from "@/components/emptyimgy";
 
 
 const ImagePage = () => {
-    const proModal = useProModal();
-    const router = useRouter();
-    const [images, setImages] = useState<string[]>([]);
+  const { messages } = useConversationContext();
+  const proModal = useProModal();
+  const router = useRouter();
+  const [images, setImages] = useState<string[]>([]);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      prompt: "",
+      amount: "1",
+      resolution: "512x512",
+    },
+  });
 
+  const isLoading = form.formState.isSubmitting;
+  const [conversationPrompt, setConversationPrompt] = useState<string | null>(null);
 
-    const form = useForm<z.infer<typeof formSchema>> ({
-        resolver: zodResolver(formSchema),
-        defaultValues:{
-            prompt:"",
-            amount: "1",
-            resolution: "512x512"
-        }
-    });
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      setImages([]);
 
-    const isLoading = form.formState.isSubmitting;
+      if (conversationPrompt) {
+        const response = await axios.post('/api/image', {
+          prompt: conversationPrompt,
+          amount: values.amount,
+          resolution: values.resolution,
+        });
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
-      try {
-        setImages([]);
-  
-        const response = await axios.post('/api/image', values);
-  
         const urls = response.data.map((image: { url: string }) => image.url);
-  
-    setImages(urls)
-    form.reset();
-      } catch (error: any) {
-        if (error?.response?.status === 403) {
+        setImages(urls);
+        form.reset();
+      } else {
+        const response = await axios.post('/api/image', values);
+        const urls = response.data.map((image: { url: string }) => image.url);
+        setImages(urls);
+        form.reset();
+      }
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
         proModal.onOpen();
-        }
-        else{
-          toast.error("somthing went wroung");
-        }
-        } finally {
-            router.refresh();
-        }
-}
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      router.refresh();
+    }
+  };
+
+  useEffect(() => {
+    const lastUserMessage = messages
+      .filter((message) => message.role === "user")
+      .pop();
+
+    if (lastUserMessage) {
+      setConversationPrompt(`"${lastUserMessage}" make the words and sentences in the colons into a descriptive paragraph for dalle.2 to generate better and more detailed images. without any introduction or conclusion. word limit 50`);
+    }
+  }, [messages]);
+
+
+
 
   return (
-    <div className="">
-        <Heading
-        title="Image Generation"
-        descripition="Turn your prompt into an image."
-        icon={ImageIcon}
-        iconColor="text-pink-700"
-        bgColor="bg-pink-700/20"
-        />
-        <div className="px-4 lg:px-8">
-            <div className="">
+
+        <div className="flex flex-col justify-end height-full min-h-screen">
+
+            <div className="space-y-4 mt-4 px-3">
+            {isLoading && (
+            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+              <Loader/>
+            </div>
+            )}
+                {images.length === 0 && !isLoading &&(
+                    <div>
+                        <EmptyImage label="No Images Genarated."/>
+                    </div>
+                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
+                {images.map((src) => (
+                    <Card key={src} className=" overflow-hidden border-dotted  border-2 rounded-lg">
+                    <div className="relative aspect-square">
+                        <Image
+                        fill
+                        alt="Generated"
+                        src={src}
+                        />
+                    </div>
+                    <CardFooter className="p-2 bg-[#44b75c]">
+                        <Button onClick={() => window.open(src)}  className="w-full ">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                        </Button>
+                    </CardFooter>
+                    </Card>
+                ))}
+                </div>
+            </div>
+            <div className="sticky bottom-3 px-3 w-full">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}
-                    className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
+                    className="mt-12 bg-[var(--cards)] rounded-lg w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
                     >
                         <FormField
                             name="prompt"
                             render={({field}) => (
                                 <FormItem className="col-span-12 lg:col-span-10">
-                                    <FormControl className="m-0 p-0">
-                                        <Input className="border-0 outline-none 
-                                        focus-visible:ring-0 focus-visible:ring-transparant" disabled={isLoading} placeholder="Type Something To Generat." {...field}></Input>
+                                    <FormControl className="">
+                                        <Input className="border-none" disabled={isLoading} placeholder="Type Something To Generat." {...field}></Input>
                                     </FormControl>
                                 </FormItem>
                             )}
@@ -89,14 +137,14 @@ const ImagePage = () => {
               control={form.control}
               name="amount"
               render={({ field }) => (
-                <FormItem className="col-span-12 lg:col-span-3">
+                <FormItem className="col-span-12 lg:col-span-1 bg-[var(--form-items)] "style={{borderRadius:".2rem"}}>
                   <Select 
                     disabled={isLoading} 
                     onValueChange={field.onChange} 
                     value={field.value} 
                     defaultValue={field.value}
                   >
-                    <FormControl>
+                    <FormControl className="border-none">
                       <SelectTrigger>
                         <SelectValue defaultValue={field.value} />
                       </SelectTrigger>
@@ -119,14 +167,14 @@ const ImagePage = () => {
               control={form.control}
               name="resolution"
               render={({ field }) => (
-                <FormItem className="col-span-12 lg:col-span-3">
+                <FormItem className="col-span-12 lg:col-span-1 border-none bg-[var(--form-items)]" style={{borderRadius:".2rem"}}>
                   <Select 
                     disabled={isLoading} 
                     onValueChange={field.onChange} 
                     value={field.value} 
                     defaultValue={field.value}
                   >
-                    <FormControl>
+                    <FormControl className="border-none" >
                       <SelectTrigger>
                         <SelectValue defaultValue={field.value} />
                       </SelectTrigger>
@@ -145,47 +193,14 @@ const ImagePage = () => {
                 </FormItem>
               )}
             />
-                        <Button className="col-span-12 lg:col-span-2 w-full" disabled={isLoading}> 
+                        <Button className="bg-[var(--button)]  col-span-12  w-full" disabled={isLoading}> 
                             Generate
                         </Button>
                     </form>
                 </Form>
             </div>
-            <div className="space-y-4 mt-4">
-                {isLoading && (
-                    <div className="p-20">
-                        <Loader/>
-                    </div>
-                )}
-                {images.length === 0 && !isLoading &&(
-                    <div>
-                        <Empty label="No Images Genarated."/>
-                    </div>
-                )}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
-                {images.map((src) => (
-                    <Card key={src} className="rounded-lg overflow-hidden">
-                    <div className="relative aspect-square">
-                        <Image
-                        fill
-                        alt="Generated"
-                        src={src}
-                        />
-                    </div>
-                    <CardFooter className="p-2">
-                        <Button onClick={() => window.open(src)} variant="secondary" className="w-full">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download
-                        </Button>
-                    </CardFooter>
-                    </Card>
-                ))}
-                </div>
-            </div>
         </div>
-    </div>
    );
 };
 
 export default ImagePage;
-

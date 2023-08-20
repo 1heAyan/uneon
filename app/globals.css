@@ -1,79 +1,116 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
-html,
-body,
-:root{
-  height: 100%;
+
+
+
+
+:root {
+  --sidebar: #ffff;
+  --foreground: #333;
+
+  --searchbar:#ffff;
+
+  --bgbtn:#b2b2b2;
+
+  --categorg:#e0e0e0;
+
+  --cards:#ffff;
+
+  --sidebaract:#f0f0f0;
+
+  --button:orange;
+  --form-items:orange;
+
+  --background:#eee;
+
+  --text:#424242;
+
+  --muted: #888;
+  --muted-foreground: #555;
+
+  --popover: #ddd;
+  --popover-foreground: #555;
+
+  --card: #f0f0f0;
+  --card-foreground: #333;
+
+
+  --border: #ddd;
+  --input: #ddd;
+
+  --primary: #007bff;
+  --primary-foreground: #f0f0f0;
+
+  --secondary: #888;
+  --secondary-foreground: #f0f0f0;
+
+  --accent: #888;
+  --accent-foreground: #f0f0f0;
+
+  --destructive: #444;
+  --destructive-foreground: #f0f0f0;
+
+  --ring: #888;
+
+  --radius: 0.5rem;
 }
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
- 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
- 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
- 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
- 
-    --primary: 256 90% 60%;
-    --primary-foreground: 210 40% 98%;
- 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
- 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
- 
-    --ring: 215 20.2% 65.1%;
- 
-    --radius: 0.5rem;
-  }
- 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
- 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
- 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
- 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
- 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
- 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
- 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
- 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
- 
-    --ring: 217.2 32.6% 17.5%;
-  }
+.user-button-container .cl-avatar {
+  border-radius: 0.5rem;
+  background-color: #45b75c;
+  /* Add any other styling you want for the container */
 }
- 
+
+.dark {
+  --bgbtn:#545454;
+
+  --sidebar: #222;
+  --foreground: #f0f0f0;
+
+  --background:#2c2c2c;
+
+  --sidebaract:#333333;
+
+  --cards:#333333;
+
+  --searchbar:#333333;
+
+  --categorg:#333333;
+
+  --button:#636262;
+
+  --text:#ffff;
+
+  --form-items:#403f3f;
+
+  --muted: #333;
+  --muted-foreground: #ccc;
+
+  --popover: #222;
+  --popover-foreground: #f0f0f0;
+
+  --card: #222;
+  --card-foreground: #f0f0f0;
+
+  --border: #333;
+  --input: #333;
+
+  --primary: #007bff;
+  --primary-foreground: #222;
+
+  --secondary: #333;
+  --secondary-foreground: #f0f0f0;
+
+  --accent: #333;
+  --accent-foreground: #f0f0f0;
+
+  --destructive: #444;
+  --destructive-foreground: #f0f0f0;
+
+  --ring: #333;
+}
+
 @layer base {
   * {
     @apply border-border;

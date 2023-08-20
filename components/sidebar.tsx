@@ -1,62 +1,12 @@
-"use client";
+"use client"
 
-import { cn } from "@/lib/utils";
-import { Code, ImageIcon, LayoutDashboard, MessagesSquare, Music, Settings, VideoIcon } from "lucide-react";
-import { Luckiest_Guy } from "next/font/google";
-import Image from "next/image";
-import Link from "next/link";
-import {usePathname} from "next/navigation"
-import { FreeCounter } from "./free-counter";
-
-const luckiest_guy = Luckiest_Guy ({
-    weight:"400",
-    subsets: ["latin"]
-});
-
-
-const routes = [
-  {
-    label: 'Dashboard',
-    icon: LayoutDashboard,
-    href: '/dashboard',
-    color: "text-sky-500"
-  },
-  {
-    label: 'Conversation',
-    icon: MessagesSquare,
-    href: '/conversation',
-    color: "text-violet-500",
-  },
-  // {
-  //   label: 'Image Generation',
-  //   icon: ImageIcon,
-  //   color: "text-pink-700",
-  //   href: '/image',
-  // },
-  // {
-  //   label: 'Video Generation',
-  //   icon: VideoIcon,
-  //   color: "text-orange-700",
-  //   href: '/video',
-  // },
-  // {
-  //   label: 'Music Generation',
-  //   icon: Music,
-  //   color: "text-emerald-500",
-  //   href: '/music',
-  // },
-  // {
-  //   label: 'Code Generation',
-  //   icon: Code,
-  //   color: "text-green-700",
-  //   href: '/code',
-  // },
-  {
-    label: 'Settings',
-    icon: Settings,
-    href: '/settings',
-  },
-];
+import React from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { useProModal } from '@/hook/use-pro-modal';
+import 'boxicons/css/boxicons.min.css';
+import { UserButton } from '@clerk/nextjs';
 
 export const Sidebar = ({
   apiLimitCount = 0,
@@ -65,44 +15,65 @@ export const Sidebar = ({
   apiLimitCount: number;
   isPro: boolean;
 }) => {
+  const proModal = useProModal();
+  const router = useRouter();
   const pathname = usePathname();
 
+  const onNavigate = (url: string, pro: boolean) => {
+    if (pro && !isPro) {
+      return proModal.onOpen();
+    }
+    return router.push(url);
+  };
+
+  const routes = [
+    {
+      icon: 'bx bxs-grid-alt', 
+      href: '/dashboard',
+      color:'text-[#1F72E0]',
+    },
+    {
+      icon: 'bx bxs-chat',
+      href: '/conversation',
+      color: 'text-[#008080]',
+    },
+    {
+      icon: 'bx bxs-image',
+      color: 'text-[#EF5800]',
+      href: '/image',
+    },
+    {
+      icon: 'bx bxs-message-dots',
+      href: '/ai-companion',
+      color: 'text-[#44b75c]',
+    },
+  ];
+
+  
+
   return (
-    <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white">
-      <div className="px-3 py-2 flex-1">
-        <Link href="/dashboard" className="flex items-center pl-3 mb-14">
-          <div className="relative h-8 w-8 mr-4">
-            <Image fill alt="Logo" src="/logo.jpeg"style={{ borderRadius: ".5rem" }}/>
-          </div>
-          <h1 className={cn("text-2xl font-bold ", luckiest_guy.className)}>
-            Expel
-          </h1>
-        </Link>
-        <div className="space-y-1">
+    <div className="space-y-4 flex flex-col h-full text-primary bg-[var(--sidebar)]">
+      <div className="p-3 flex-1 flex justify-between flex-col  items-center ">
+        <div className="space-y-5 ">
           {routes.map((route) => (
             <Link
-              key={route.href} 
+              key={route.href}
               href={route.href}
               className={cn(
-                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition",
-                pathname === route.href ? "text-white bg-white/10" : "text-zinc-400",
+                'text-muted-foreground text-xs group flex p-3 w-full justify-start font-medium cursor-pointer  rounded-lg transition',
+                pathname === route.href ? ' bg-[var(--sidebaract)]' : ''
               )}
             >
-              <div className="flex items-center flex-1">
-                <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
-                {route.label}
+              <div className="flex items-center flex-1 ">
+                <i className={`${route.icon} ${route.color}`} style={{ fontSize: '1.8rem' }}></i>
               </div>
             </Link>
           ))}
         </div>
+        <div className="border-dotted p-2 border-2 rounded-lg user-button-container">
+            <UserButton afterSignOutUrl="/"  />
+        </div>
       </div>
-      <FreeCounter 
-        apiLimitCount={apiLimitCount} 
-        isPro={isPro}
-      />
     </div>
   );
 };
-
-
-export default Sidebar;

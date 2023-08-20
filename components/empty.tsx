@@ -1,4 +1,6 @@
-import Image from "next/image";
+import {  MessagesSquare } from "lucide-react";
+import { Heading } from "@/components/heading";
+
 
 
 interface EmptyProps {
@@ -9,13 +11,14 @@ export const Empty = ({
   label
 }: EmptyProps) => {
   return (
-    <div className="h-full p-20 flex flex-col items-center justify-center">
-      <div className="relative h-72 w-72">
-        <Image src="/empty.png" fill alt="Empty" />
-      </div>
-      <p className="text-muted-foreground text-sm text-center">
-        {label}
-      </p>
+    <div className="flex items-center justify-center p-8">
+      <Heading
+        title="Conversation"
+        descripition="Our most Advance Conversation model."
+        icon={MessagesSquare}
+        iconColor="text-violet-500"
+        bgColor="bg-violet-700/20"
+        />
     </div>
   );
 };
