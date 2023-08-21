@@ -61,7 +61,7 @@
     "react-hot-toast": "^2.4.1",
     "react-markdown": "^8.0.7",
     "react-spinners": "^0.13.8",
-    "replicate": "^0.14.1",
+    "replicate": "^0.12.3",
     "stripe": "^12.16.0",
     "styled-components": "^6.0.7",
     "tailwind-merge": "^1.14.0",
