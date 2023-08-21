@@ -7,6 +7,9 @@ import { cn } from '@/lib/utils';
 import { useProModal } from '@/hook/use-pro-modal';
 import 'boxicons/css/boxicons.min.css';
 import { UserButton } from '@clerk/nextjs';
+import { FreeCounter } from './free-counter';
+import { ModeToggle } from './mode-toggle';
+import { SettingsCenter } from './settings-center';
 
 export const Sidebar = ({
   apiLimitCount = 0,
@@ -70,8 +73,14 @@ export const Sidebar = ({
             </Link>
           ))}
         </div>
-        <div className="border-dotted p-2 border-2 rounded-lg user-button-container">
-            <UserButton afterSignOutUrl="/"  />
+        <div className="">
+        <FreeCounter  
+          apiLimitCount={apiLimitCount} 
+          isPro={isPro}
+      />
+        </div>
+        <div className="">
+          <SettingsCenter/>
         </div>
       </div>
     </div>

@@ -38,6 +38,8 @@ const ConverstionPage = () => {
 
   const isLoading = form.formState.isSubmitting;
 
+  
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const userMessage: ChatCompletionRequestMessage = {
@@ -63,6 +65,7 @@ const ConverstionPage = () => {
     }
   };
 
+
   return (
     <div className="flex flex-col justify-end height-full min-h-screen">
       <div className="px-4 lg:px-4">
@@ -79,7 +82,7 @@ const ConverstionPage = () => {
                 key={message.content}
                 className={cn(
                   "p-8 w-full flex items-start gap-x-8 rounded-lg",
-                  message.role === "user" ? " text-[var(--text)] bg-[var(--cards)] " : "bg-[var(--cards)] "
+                  message.role === "user" ? " text-[var(--text)] bg-[var(--cards)] " : "bg-[#d0cece]  text-[#424242]"
                 )}
                         >
                         {message.role === "user" ? <UserAvatar/> : <BotAvatar/>}
@@ -122,7 +125,7 @@ const ConverstionPage = () => {
                 </FormItem>
               )}
             />
-            <Button className=" bg-[var(--button)]" disabled={isLoading}>
+            <Button className=" bg-[var(--activebtn)] text-[#ffff]" disabled={isLoading}>
               Generate
             </Button>
           </form>

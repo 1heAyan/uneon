@@ -14,7 +14,7 @@ import { AppProps } from 'next/app';
 const font = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Expel',
+  title: 'Uneon',
   description: 'AI Platform',
 };
 
@@ -29,7 +29,7 @@ export default function RootLayout({
     <ClerkProvider {...pageProps} appearance={
       {
         variables: {
-          borderRadius:"0.2rem"
+          borderRadius:"0.5rem"
         }
       }
     }>

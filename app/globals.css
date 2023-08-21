@@ -3,8 +3,6 @@
 @tailwind utilities;
 
 
-
-
 :root {
   --sidebar: #ffff;
   --foreground: #333;
@@ -19,8 +17,10 @@
 
   --sidebaract:#f0f0f0;
 
-  --button:orange;
-  --form-items:orange;
+  --progressbar:#d8d8d8;
+
+  --button:#e0e0e0;
+  --form-items:#ebebeb;
 
   --background:#eee;
 
@@ -50,21 +50,25 @@
 
   --destructive: #444;
   --destructive-foreground: #f0f0f0;
-
+  
+  --activebtn: #44b75c;
   --ring: #888;
 
   --radius: 0.5rem;
 }
 
-.user-button-container .cl-avatar {
-  border-radius: 0.5rem;
-  background-color: #45b75c;
-  /* Add any other styling you want for the container */
+/* Example CSS */
+.custom-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 100%;
+  background: var(--card) ;
 }
+
 
 .dark {
   --bgbtn:#545454;
-
+  --activebtn: #44b75c;
   --sidebar: #222;
   --foreground: #f0f0f0;
 
@@ -73,6 +77,8 @@
   --sidebaract:#333333;
 
   --cards:#333333;
+
+  --progressbar:#333333;
 
   --searchbar:#333333;
 

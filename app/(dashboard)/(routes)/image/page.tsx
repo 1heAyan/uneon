@@ -85,48 +85,16 @@ const ImagePage = () => {
 
   return (
 
-        <div className="flex flex-col justify-end height-full min-h-screen">
-
-            <div className="space-y-4 mt-4 px-3">
-            {isLoading && (
-            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
-              <Loader/>
-            </div>
-            )}
-                {images.length === 0 && !isLoading &&(
-                    <div>
-                        <EmptyImage label="No Images Genarated."/>
-                    </div>
-                )}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
-                {images.map((src) => (
-                    <Card key={src} className=" overflow-hidden border-dotted  border-2 rounded-lg">
-                    <div className="relative aspect-square">
-                        <Image
-                        fill
-                        alt="Generated"
-                        src={src}
-                        />
-                    </div>
-                    <CardFooter className="p-2 bg-[#44b75c]">
-                        <Button onClick={() => window.open(src)}  className="w-full ">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download
-                        </Button>
-                    </CardFooter>
-                    </Card>
-                ))}
-                </div>
-            </div>
-            <div className="sticky bottom-3 px-3 w-full">
+        <div className="flex flex-col">
+            <div className=" px-3 w-full">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}
-                    className="mt-12 bg-[var(--cards)] rounded-lg w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
+                    className="mt-4 bg-[var(--cards)] rounded-lg w-full p-4 focus-within:shadow-sm grid grid-cols-12 gap-2"
                     >
                         <FormField
                             name="prompt"
                             render={({field}) => (
-                                <FormItem className="col-span-12 lg:col-span-10">
+                                <FormItem className="col-span-12 lg:col-span-10 bg-[var(--form-items)]"style={{borderRadius:".2rem"}}>
                                     <FormControl className="">
                                         <Input className="border-none" disabled={isLoading} placeholder="Type Something To Generat." {...field}></Input>
                                     </FormControl>
@@ -193,11 +161,42 @@ const ImagePage = () => {
                 </FormItem>
               )}
             />
-                        <Button className="bg-[var(--button)]  col-span-12  w-full" disabled={isLoading}> 
+                        <Button className="bg-[var(--activebtn)]  col-span-12 text-[#ffff] w-full" disabled={isLoading}> 
                             Generate
                         </Button>
                     </form>
                 </Form>
+            </div>
+            <div className="space-y-4 mt-4 px-3">
+            {isLoading && (
+            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+              <Loader/>
+            </div>
+            )}
+                {images.length === 0 && !isLoading &&(
+                    <div>
+                        <EmptyImage label="No Images Genarated."/>
+                    </div>
+                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {images.map((src) => (
+                    <Card key={src} className=" overflow-hidden border-dotted  border-2 rounded-lg">
+                    <div className="relative aspect-square">
+                        <Image
+                        fill
+                        alt="Generated"
+                        src={src}
+                        />
+                    </div>
+                    <CardFooter className="p-2 bg-[#44b75c]">
+                        <Button onClick={() => window.open(src)}  className="w-full ">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                        </Button>
+                    </CardFooter>
+                    </Card>
+                ))}
+                </div>
             </div>
         </div>
    );
