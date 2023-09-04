@@ -50,9 +50,12 @@ export const Sidebar = ({
       href: '/ai-companion',
       color: 'text-[#44b75c]',
     },
+    // {
+    //   icon: 'bx bx-file',
+    //   href: '/text-bot',
+    //   color: 'text-[#]',
+    // },
   ];
-
-  
 
   return (
     <div className="space-y-4 flex flex-col h-full text-primary bg-[var(--sidebar)]">
@@ -82,6 +85,7 @@ export const Sidebar = ({
         <div className="">
           <SettingsCenter/>
         </div>
+        <UserButton/>
       </div>
     </div>
   );
